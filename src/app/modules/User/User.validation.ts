@@ -27,8 +27,25 @@ const UserValidationSchema = z.object({
   }),
 });
 
+const LoginUserValidationSchema = z.object({
+  body: z.object({
+    username: z
+      .string({
+        required_error: 'Username is required',
+        invalid_type_error: 'Username must be a string',
+      })
+      .trim(),
+    password: z
+      .string({
+        required_error: 'Password is required',
+        invalid_type_error: 'Password must be a string',
+      })
+      .trim(),
+  }),
+});
 const UserValidations = {
   UserValidationSchema,
+  LoginUserValidationSchema,
 };
 
 export default UserValidations;
