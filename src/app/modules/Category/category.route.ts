@@ -15,9 +15,10 @@ route.post(
 route.get('/', CategoryControllers.getAllCategories);
 route.put(
   '/:id',
+  auth('admin'),
   validateRequest(CategoryValidationSchema),
   CategoryControllers.updateCategory,
 );
-route.delete('/:id', CategoryControllers.deleteCategory);
+route.delete('/:id', auth('admin'), CategoryControllers.deleteCategory);
 
 export const CategoryRoutes = route;
