@@ -61,6 +61,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   const courses = Course.find(queryObject).populate([
     {
       path: 'categoryId',
+      select: '-__v',
     },
     {
       path: 'createdBy',
@@ -84,7 +85,16 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleCourseFromDB = async (id: string) => {
-  const course = await Course.findById(id).populate('categoryId');
+  const course = await Course.findById(id).populate([
+    {
+      path: 'categoryId',
+      select: '-__v',
+    },
+    {
+      path: 'createdBy',
+      select: '-createdAt -updatedAt -__v',
+    },
+  ]);
   return course;
 };
 
@@ -167,7 +177,16 @@ const deleteCourseFromDB = async (id: string) => {
 };
 
 const getTheBestCourseFromDB = async () => {
-  const courses = await Course.find();
+  const courses = await Course.find().populate([
+    {
+      path: 'categoryId',
+      select: '-__v',
+    },
+    {
+      path: 'createdBy',
+      select: '-createdAt -updatedAt -__v',
+    },
+  ]);
 
   if (courses.length === 0) {
     throw new AppError(httpStatus.NOT_FOUND, 'No courses found');
