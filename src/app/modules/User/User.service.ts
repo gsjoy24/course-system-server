@@ -17,7 +17,9 @@ const loginUser = async (payload: TLoginUser) => {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  const user = await User.findOne({ username: payload.username });
+  const user = await User.findOne({ username: payload.username }).select(
+    '-updatedAt -createdAt -__v ',
+  );
 
   // check for password match
   const isPasswordMatched = await User.isPasswordMatched(

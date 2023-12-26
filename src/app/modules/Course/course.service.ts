@@ -167,6 +167,9 @@ const updateCourseInDB = async (id: string, data: TCourse) => {
 
   const course = await Course.findByIdAndUpdate(id, modifiedData, {
     new: true,
+  }).populate({
+    path: 'createdBy',
+    select: '-createdAt -updatedAt -__v',
   });
   return course;
 };
