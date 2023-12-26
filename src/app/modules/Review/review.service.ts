@@ -1,13 +1,21 @@
+import { JwtPayload } from 'jsonwebtoken';
 import TReview from './review.interface';
 import { Review } from './review.model';
 
-const createReviewIntoDB = async (data: TReview) => {
-  const review = await Review.create(data);
+const createReviewIntoDB = async (userData: JwtPayload, payload: TReview) => {
+  payload.createdBy = userData._id;
+  const review = (await Review.create(payload)).populate({
+    path: 'createdBy',
+    select: '-createdAt -updatedAt -__v',
+  });
   return review;
 };
 
 const getReviewsFromDB = async (courseId: string) => {
-  const reviews = await Review.find({ courseId });
+  const reviews = await Review.find({ courseId }).populate({
+    path: 'createdBy',
+    select: '-createdAt -updatedAt -__v',
+  });
   return reviews;
 };
 
@@ -18,7 +26,10 @@ const deleteReviewFromDB = async (courseId: string) => {
 };
 
 const getAllReviewsFromDB = async () => {
-  const reviews = await Review.find();
+  const reviews = await Review.find().populate({
+    path: 'createdBy',
+    select: '-createdAt -updatedAt -__v',
+  });
   return reviews;
 };
 
