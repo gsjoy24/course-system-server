@@ -4,6 +4,7 @@ import { handleZodError } from '../errors/handleZodError';
 import handleValidationError from '../errors/handleValidationError';
 import { handleCastError } from '../errors/handleCastError';
 import AppError from '../errors/AppError';
+import { unauthorizedError } from '../errors/UnauthorizedError';
 
 const globalErrorHandler: ErrorRequestHandler = (
   err,
@@ -23,6 +24,8 @@ const globalErrorHandler: ErrorRequestHandler = (
     simplifyError = handleValidationError(err);
   } else if (err.name === 'CastError') {
     simplifyError = handleCastError(err);
+  } else if (err.statusCode === 401) {
+    simplifyError = unauthorizedError(err);
   }
 
   statusCode = simplifyError?.statusCode;
@@ -38,8 +41,8 @@ const globalErrorHandler: ErrorRequestHandler = (
     success: false,
     message,
     errorMessage,
-    errorDetails: err,
-    stack: err?.stack,
+    errorDetails: err.statusCode === 401 ? null : err,
+    stack: err.statusCode === 401 ? null : err?.stack,
   });
 };
 
