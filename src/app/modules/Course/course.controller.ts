@@ -4,9 +4,13 @@ import sendResponse from '../../utils/sendResponse';
 import CourseServices from './course.service';
 import { Request, Response } from 'express';
 import ReviewServices from '../Review/review.service';
+import { JwtPayload } from 'jsonwebtoken';
 
 const createCourse = catchAsync(async (req: Request, res: Response) => {
-  const Course = await CourseServices.createCourseIntoDB(req.user, req.body);
+  const Course = await CourseServices.createCourseIntoDB(
+    req.user as JwtPayload,
+    req.body,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

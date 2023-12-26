@@ -58,7 +58,15 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     queryObject['details.level'] = query.level;
   }
 
-  const courses = Course.find(queryObject).populate('categoryId');
+  const courses = Course.find(queryObject).populate([
+    {
+      path: 'categoryId',
+    },
+    {
+      path: 'createdBy',
+      select: '-createdAt -updatedAt -__v',
+    },
+  ]);
   const coursesWithTags = courses.find(searchTags);
   const coursesWithPrice = coursesWithTags.find(minMaxPrice);
 
