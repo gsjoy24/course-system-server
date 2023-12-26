@@ -3,9 +3,13 @@ import sendResponse from '../../utils/sendResponse';
 import CategoryServices from './category.service';
 import { Request, Response } from 'express';
 import catchAsync from '../../utils/catchAsync';
+import { JwtPayload } from 'jsonwebtoken';
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
-  const category = await CategoryServices.createCategoryIntoDB(req.body);
+  const category = await CategoryServices.createCategoryIntoDB(
+    req.user as JwtPayload,
+    req.body,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

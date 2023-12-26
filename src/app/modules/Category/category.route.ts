@@ -2,11 +2,13 @@ import express from 'express';
 import CategoryControllers from './category.controller';
 import validateRequest from '../../middlewares/validateRequest';
 import CategoryValidationSchema from './category.validation';
+import auth from '../../middlewares/auth';
 
 const route = express.Router();
 
 route.post(
   '/',
+  auth('admin'),
   validateRequest(CategoryValidationSchema),
   CategoryControllers.createCategory,
 );
