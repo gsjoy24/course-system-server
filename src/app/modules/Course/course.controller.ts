@@ -6,7 +6,7 @@ import { Request, Response } from 'express';
 import ReviewServices from '../Review/review.service';
 
 const createCourse = catchAsync(async (req: Request, res: Response) => {
-  const Course = await CourseServices.createCourseIntoDB(req.body);
+  const Course = await CourseServices.createCourseIntoDB(req.user, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

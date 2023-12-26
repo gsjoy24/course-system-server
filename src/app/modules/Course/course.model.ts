@@ -56,6 +56,10 @@ const CourseSchema = new Schema<TCourse>({
       trim: true,
     },
   },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 // Pre-save hook || calculating durationInWeeks

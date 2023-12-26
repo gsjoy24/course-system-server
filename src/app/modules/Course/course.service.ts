@@ -5,9 +5,11 @@ import { Course } from './course.model';
 import { Review } from '../Review/review.model';
 import { excludeFields } from './course.constant';
 import dateToWeeks from '../../utils/dateToWeeks';
+import { JwtPayload } from 'jsonwebtoken';
 
-const createCourseIntoDB = async (data: TCourse) => {
-  const course = await Course.create(data);
+const createCourseIntoDB = async (userData: JwtPayload, payload: TCourse) => {
+  payload.createdBy = userData._id;
+  const course = await Course.create(payload);
   return course;
 };
 
