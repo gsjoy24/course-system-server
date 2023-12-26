@@ -17,9 +17,21 @@ const UserValidationSchema = z.object({
         message: 'Email must be a valid email',
       })
       .trim(),
-    password: z.string({
-      required_error: 'Password is required',
-    }),
+    password: z
+      .string({
+        required_error: 'Password is required',
+        invalid_type_error: 'Password must be a string',
+      })
+      .refine(
+        (value) => {
+          const strongEnough = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+          return strongEnough.test(value);
+        },
+        {
+          message:
+            'Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one number.',
+        },
+      ),
     role: z.enum(['user', 'admin'], {
       required_error: 'Role is required',
       invalid_type_error: 'Role must be either "user" or "admin"',
