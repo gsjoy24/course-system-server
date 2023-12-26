@@ -24,8 +24,8 @@ const UserValidationSchema = z.object({
       })
       .refine(
         (value) => {
-          const strongEnough = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-          return strongEnough.test(value);
+          const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+          return regex.test(value);
         },
         {
           message:
@@ -55,9 +55,31 @@ const LoginUserValidationSchema = z.object({
       .trim(),
   }),
 });
+
+const passwordChange = z.object({
+  currentPassword: z.string({
+    required_error: 'Current password is required',
+  }),
+  newPassword: z
+    .string({
+      required_error: 'New password is required',
+    })
+    .refine(
+      (value) => {
+        const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        return regex.test(value);
+      },
+      {
+        message:
+          'Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one number.',
+      },
+    ),
+});
+
 const UserValidations = {
   UserValidationSchema,
   LoginUserValidationSchema,
+  passwordChange,
 };
 
 export default UserValidations;
