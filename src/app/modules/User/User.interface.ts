@@ -9,6 +9,8 @@ export type TUser = {
   role: 'user' | 'admin';
 };
 
+export type TUserRole = 'user' | 'admin';
+
 export type TLoginUser = {
   username: string;
   password: string;

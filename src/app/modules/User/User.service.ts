@@ -11,6 +11,7 @@ const createUserIntoDB = async (payload: TUser) => {
 };
 
 const loginUser = async (payload: TLoginUser) => {
+  // check if the user exists
   const isUserExits = await User.isUserExists(payload.username);
   if (!isUserExits) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found');
