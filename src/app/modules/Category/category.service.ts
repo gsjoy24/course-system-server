@@ -1,6 +1,8 @@
 import { JwtPayload } from 'jsonwebtoken';
 import { TCategory } from './category.interface';
 import { Category } from './category.model';
+import AppError from '../../errors/AppError';
+import httpStatus from 'http-status';
 
 const createCategoryIntoDB = async (
   userData: JwtPayload,
@@ -20,11 +22,22 @@ const getAllCategoriesFromDB = async () => {
 };
 
 const updateCategoryInDB = async (id: string, payload: TCategory) => {
+  // check if the category exists
+  const categoryExists = await Category.findById(id);
+  if (!categoryExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
+  }
+
   const category = await Category.findByIdAndUpdate(id, payload, { new: true });
   return category;
 };
 
 const deleteCategoryInDB = async (id: string) => {
+  // check if the category exists
+  const categoryExists = await Category.findById(id);
+  if (!categoryExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
+  }
   const category = await Category.findByIdAndDelete(id);
   return category;
 };
