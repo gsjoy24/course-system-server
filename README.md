@@ -33,4 +33,8 @@ the server is running on port 5000
 - 8️⃣ You can run the command 'npm run lint' to see if there is any errors on my code. You will see 4 warnings only for console.
 
 Now you can do all the CRUD operations that was required for the assignment. I will recommend you to see the package.json file to see all the commands.
-This server is deployed on vercel, the link is ↦ https://l2-assingment-4.vercel.app
+
+#### This server is deployed on vercel,
+
+- live link ↦ https://l2-assingment-4.vercel.app
+- documentation - https://documenter.getpostman.com/view/31240534/2s9YkuXxDs
