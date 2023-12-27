@@ -3,10 +3,20 @@ import { Schema, model } from 'mongoose';
 import { TPreviousPassword, TUser, UserModel } from './Auth.interface';
 import config from '../../config';
 
-const previousPasswordSchema = new Schema<TPreviousPassword>({
-  password: String,
-  createdAt: Date,
-});
+const previousPasswordSchema = new Schema<TPreviousPassword>(
+  {
+    password: {
+      type: String,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    _id: false,
+  },
+);
 
 const UserSchema = new Schema<TUser, UserModel>(
   {
@@ -30,7 +40,11 @@ const UserSchema = new Schema<TUser, UserModel>(
       enum: ['user', 'admin'],
       default: 'user',
     },
-    previousPasswords: [previousPasswordSchema],
+    previousPasswords: {
+      type: [previousPasswordSchema],
+      default: [],
+      select: false,
+    },
   },
   {
     timestamps: true,
@@ -51,8 +65,10 @@ UserSchema.pre('save', async function (next) {
 // removing the password from the returning data for user creation.
 UserSchema.post('save', function (doc, next) {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const { password, ...userDataWithoutPassword } = this.toObject();
+  const { password, previousPasswords, ...userDataWithoutPassword } =
+    this.toObject();
   this.set('password', undefined, { strict: false });
+  this.set('previousPasswords', undefined, { strict: false });
 
   // Update the document with userDataWithoutPassword
   Object.assign(this, userDataWithoutPassword);

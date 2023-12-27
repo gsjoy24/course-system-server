@@ -4,7 +4,7 @@ import { handleZodError } from '../errors/handleZodError';
 import handleValidationError from '../errors/handleValidationError';
 import { handleCastError } from '../errors/handleCastError';
 import AppError from '../errors/AppError';
-import { unauthorizedError } from '../errors/UnauthorizedError';
+import { unauthorizedError } from '../errors/unauthorizedError';
 
 const globalErrorHandler: ErrorRequestHandler = (
   err,
