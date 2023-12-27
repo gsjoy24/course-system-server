@@ -1,7 +1,12 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
-import { TUser, UserModel } from './User.interface';
+import { TPreviousPassword, TUser, UserModel } from './Auth.interface';
 import config from '../../config';
+
+const previousPasswordSchema = new Schema<TPreviousPassword>({
+  password: String,
+  createdAt: Date,
+});
 
 const UserSchema = new Schema<TUser, UserModel>(
   {
@@ -25,6 +30,7 @@ const UserSchema = new Schema<TUser, UserModel>(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    previousPasswords: [previousPasswordSchema],
   },
   {
     timestamps: true,

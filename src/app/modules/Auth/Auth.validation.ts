@@ -56,30 +56,32 @@ const LoginUserValidationSchema = z.object({
   }),
 });
 
-const passwordChange = z.object({
-  currentPassword: z.string({
-    required_error: 'Current password is required',
+const PasswordChangeValidationSchema = z.object({
+  body: z.object({
+    currentPassword: z.string({
+      required_error: 'Current password is required',
+    }),
+    newPassword: z
+      .string({
+        required_error: 'New password is required',
+      })
+      .refine(
+        (value) => {
+          const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+          return regex.test(value);
+        },
+        {
+          message:
+            'Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one number.',
+        },
+      ),
   }),
-  newPassword: z
-    .string({
-      required_error: 'New password is required',
-    })
-    .refine(
-      (value) => {
-        const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-        return regex.test(value);
-      },
-      {
-        message:
-          'Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one number.',
-      },
-    ),
 });
 
 const UserValidations = {
   UserValidationSchema,
   LoginUserValidationSchema,
-  passwordChange,
+  PasswordChangeValidationSchema,
 };
 
 export default UserValidations;

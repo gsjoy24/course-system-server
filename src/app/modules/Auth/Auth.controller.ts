@@ -1,7 +1,8 @@
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-import { UserServices } from './User.service';
+import { UserServices } from './Auth.service';
+import { JwtPayload } from 'jsonwebtoken';
 
 const createUser = catchAsync(async (req, res) => {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -23,7 +24,23 @@ const loginUser = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+const changePassword = catchAsync(async (req, res) => {
+  const result = await UserServices.changePassword(
+    req.user as JwtPayload,
+    req.body,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Password changed successfully',
+    data: result,
+  });
+});
+
 export const UserControllers = {
   createUser,
   loginUser,
+  changePassword,
 };

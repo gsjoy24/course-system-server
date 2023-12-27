@@ -1,11 +1,16 @@
 /* eslint-disable no-unused-vars */
 import { Model } from 'mongoose';
 
+export type TPreviousPassword = {
+  password: string;
+  createdAt: Date;
+};
 export type TUser = {
   _id: string;
   username: string;
   email: string;
   password: string;
+  previousPasswords?: [TPreviousPassword];
   role: 'user' | 'admin';
 };
 

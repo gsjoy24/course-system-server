@@ -3,7 +3,7 @@ import { CategoryRoutes } from '../modules/Category/category.route';
 import { CoursesRoutes } from '../modules/Course/CourseRoutes/course.route';
 import { CourseRoutesForPostAndBestCourse } from '../modules/Course/CourseRoutes/course.another.route';
 import { ReviewRoutes } from '../modules/Review/review.route';
-import { UserRoutes } from '../modules/User/User.route';
+import { UserRoutes } from '../modules/Auth/Auth.route';
 
 const router = Router();
 const moduleRoutes = [
