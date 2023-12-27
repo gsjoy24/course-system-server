@@ -1,7 +1,7 @@
 ## Instructions on how to run the application locally 📝
 
 - 1️⃣ Clone the repository to your machine if you have the access. Use this link to do it.
-  ↦ https://github.com/Porgramming-Hero-web-course/l2b2a3-course-review-gsjoy24.git
+  ↦ https://github.com/Porgramming-Hero-web-course/l2b2a4-course-review-with-auth-gsjoy24
 - 2️⃣ Open the project in vs code and create a file named .env in the root of the folder.
 - 3️⃣ Add the code bellow in the .env file
 
@@ -33,4 +33,4 @@ the server is running on port 5000
 - 8️⃣ You can run the command 'npm run lint' to see if there is any errors on my code. You will see 4 warnings only for console.
 
 Now you can do all the CRUD operations that was required for the assignment. I will recommend you to see the package.json file to see all the commands.
-This server is deployed on vercel, the link is ↦ https://l2-assignment-3-xi.vercel.app
+This server is deployed on vercel, the link is ↦ https://l2-assingment-4.vercel.app
