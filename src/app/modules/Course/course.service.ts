@@ -70,15 +70,13 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   ]);
   const coursesWithTags = courses.find(searchTags);
   const coursesWithPrice = coursesWithTags.find(minMaxPrice);
-
-  //! getting error here, resolving a promise twice.
-  // const total = await coursesWithPrice.countDocuments(queryObject);
+  const total = await Course.countDocuments(coursesWithPrice);
   const allCourses = await coursesWithPrice.limit(limit).skip(skip).sort(sort);
 
   const meta = {
     page,
     limit,
-    total: 0,
+    total,
   };
 
   return { allCourses, meta };
