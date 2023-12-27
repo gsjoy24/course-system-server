@@ -67,9 +67,18 @@ const changePassword = async (
     user.password,
   );
   if (!isPasswordMatched) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Current password is incorrect');
+  }
+
+  // check if the new password is the same as the old password
+  const isThePasswordSame = await User.isPasswordMatched(
+    payload.newPassword,
+    user.password,
+  );
+  if (isThePasswordSame) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      'Password change failed. Ensure the new password is unique and not among the last 2 used (last used on 2023-01-01 at 12:00 PM).',
+      'New password cannot be the same as the old password',
     );
   }
 
@@ -84,6 +93,7 @@ const changePassword = async (
       date = isMatched && convertDate(prevPassword.createdAt);
       return !isMatched;
     });
+
     if (!isPasswordUnique) {
       throw new AppError(
         httpStatus.BAD_REQUEST,
@@ -94,41 +104,42 @@ const changePassword = async (
     }
   }
 
-  //  check if the new password is unique from last two passwords
-  // const newPassword = await bcrypt.hash(
-  //   payload.newPassword,
-  //   Number(config.bcrypt_salt_round),
-  // );
+  //  hash the new password
+  const newPassword = await bcrypt.hash(
+    payload.newPassword,
+    Number(config.bcrypt_salt_round),
+  );
 
-  // const updatedNewPassword = await User.findByIdAndUpdate(
-  //   user._id,
-  //   { password: newPassword },
-  //   { new: true },
-  // );
+  // update the password
+  const updatedNewPassword = await User.findByIdAndUpdate(
+    user._id,
+    { password: newPassword },
+    { new: true },
+  );
 
-  // if (!updatedNewPassword) {
-  //   throw new AppError(httpStatus.NOT_FOUND, 'User not found');
-  // }
+  if (!updatedNewPassword) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'Password change failed. Ensure the new password is unique and not among the last 2 used',
+    );
+  }
 
-  // const updatePreviousPasswords = await User.findByIdAndUpdate(
-  //   user._id,
-  //   {
-  //     $push: {
-  //       previousPasswords: {
-  //         $each: [
-  //           {
-  //             password: user.password,
-  //             createdAt: new Date(),
-  //           },
-  //         ],
-  //         $slice: -2, // Keep only the last two elements in the array
-  //       },
-  //     },
-  //   },
-  //   { new: true }, // To get the updated user object
-  // );
+  //  update the previous passwords
+  await User.findByIdAndUpdate(user._id, {
+    $push: {
+      previousPasswords: {
+        $each: [
+          {
+            password: user.password,
+            createdAt: new Date(),
+          },
+        ],
+        $slice: -2, // Keep only the last two passwords in the array
+      },
+    },
+  });
 
-  return 'updatedNewPassword';
+  return updatedNewPassword;
 };
 
 export const UserServices = {
