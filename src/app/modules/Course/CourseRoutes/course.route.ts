@@ -7,6 +7,12 @@ import auth from '../../../middlewares/auth';
 const route = express.Router();
 
 // courses routes
+route.post(
+  '/',
+  auth('admin'),
+  validateRequest(CourseValidators.CreateCourseValidationSchema),
+  CourseControllers.createCourse,
+);
 route.get('/', CourseControllers.getAllCourses);
 route.get('/:id', CourseControllers.getSingleCourse);
 route.get('/:id/reviews', CourseControllers.getSingleCourseWithReviews);
